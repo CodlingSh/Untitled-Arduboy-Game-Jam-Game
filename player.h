@@ -23,18 +23,45 @@ class Player {
     Arduboy2 *ab;
     ArduboyTones *sound;
     // ArduboyTones *sound;
-    uint8_t x = 30;
-    uint8_t y = 30;
+    uint8_t x = 60;
+    uint8_t y = 26;
+    int16_t map_scroll_x = 0;
+    int16_t map_scroll_y = 0;
     uint8_t *currSprite = human;
 
   public:
     Player(Arduboy2 *abPtr, ArduboyTones *soundPtr)
       : ab(abPtr), sound(soundPtr) {}
+    
+    // Getters
+    int16_t get_map_scroll_x() {
+      return map_scroll_x;
+    }
 
-    void update()
+    int16_t get_map_scroll_y() {
+      return map_scroll_y;
+    }
+
+    void update() {
+      if (ab->pressed(LEFT_BUTTON)) {
+        map_scroll_x++;
+      } else if (ab->pressed(RIGHT_BUTTON)) {
+        map_scroll_x--;
+      }
+
+      if (ab->pressed(UP_BUTTON)) {
+        map_scroll_y++;
+      } else if (ab->pressed(DOWN_BUTTON)) {
+        map_scroll_y--;
+      }  
+    }
 
     void draw() {
       Sprites::drawSelfMasked(x, y, currSprite, 0);
+      ab->print("X: ");
+      ab->println(map_scroll_x);
+      ab->print("Y: ");
+      ab->println(map_scroll_y);
     }
 
 
