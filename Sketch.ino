@@ -2,6 +2,8 @@
 #include "level.h"
 #include <Arduboy2.h>
 #include <ArduboyTones.h>
+#include "enemy.h"
+#include "camera.h"
 
 Arduboy2 ab;
 ArduboyTones sound(ab.audio.enabled);
