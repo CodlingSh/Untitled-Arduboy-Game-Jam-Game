@@ -23,48 +23,44 @@ class Player {
     Arduboy2 *ab;
     ArduboyTones *sound;
     // ArduboyTones *sound;
-    uint8_t x = 60;
-    uint8_t y = 26;
-    int16_t map_scroll_x = 0;
-    int16_t map_scroll_y = 0;
+    uint16_t x = 60;
+    uint16_t y = 26;
+
     uint8_t *currSprite = human;
 
   public:
     Player(Arduboy2 *abPtr, ArduboyTones *soundPtr)
       : ab(abPtr), sound(soundPtr) {}
     
-    // Getters
-    int16_t get_map_scroll_x() {
-      return map_scroll_x;
+    uint8_t get_center_x() {
+      return x + 4;
     }
 
-    int16_t get_map_scroll_y() {
-      return map_scroll_y;
+    uint8_t get_center_y() {
+      return y + 5;
     }
 
     void update() {
       if (ab->pressed(LEFT_BUTTON)) {
-        map_scroll_x++;
+        x--;
       } else if (ab->pressed(RIGHT_BUTTON)) {
-        map_scroll_x--;
+        x++;
       }
 
       if (ab->pressed(UP_BUTTON)) {
-        map_scroll_y++;
+        y--;
       } else if (ab->pressed(DOWN_BUTTON)) {
-        map_scroll_y--;
+        y++;
       }  
     }
 
-    void draw() {
-      Sprites::drawSelfMasked(x, y, currSprite, 0);
+    void draw(uint16_t offset_x, uint16_t offset_y) {
+      Sprites::drawSelfMasked(x - offset_x, y - offset_y, currSprite, 0);
       ab->print("X: ");
-      ab->println(map_scroll_x);
+      ab->println(x);
       ab->print("Y: ");
-      ab->println(map_scroll_y);
+      ab->println(y);
     }
-
-
 };
 
 #endif

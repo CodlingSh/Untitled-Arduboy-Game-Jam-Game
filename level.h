@@ -17,7 +17,7 @@ class Level {
       return map_data;
     }
 
-  void draw(uint16_t map_scroll_x, uint16_t map_scroll_y) {
+  void draw(uint16_t offset_x, uint16_t offset_y) {
     uint8_t width;
     uint8_t height;
 
@@ -33,10 +33,10 @@ class Level {
       height = 63;
     }
 
-    ab->fillRect(0 + map_scroll_x, 0 + map_scroll_y, width, 1);
-    ab->fillRect(0 + map_scroll_x, height + map_scroll_y, width, 1);
-    ab->fillRect(0 + map_scroll_x, 0 + map_scroll_y, 1, height);
-    ab->fillRect(width + map_scroll_x, 0 + map_scroll_y, 1, height);
+    ab->fillRect(0 - offset_x, 0 - offset_y, width, 1);
+    ab->fillRect(0 - offset_x, height - offset_y, width, 1);
+    ab->fillRect(0 - offset_x, 0 - offset_y, 1, height);
+    ab->fillRect(width - offset_x, 0 - offset_y, 1, height + 1);
   }
 };
 

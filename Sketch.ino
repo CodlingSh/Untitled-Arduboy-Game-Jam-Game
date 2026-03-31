@@ -7,7 +7,9 @@
 
 Arduboy2 ab;
 ArduboyTones sound(ab.audio.enabled);
+Camera c(0, 0);
 Player player(&ab, &sound);
+Enemy enemy(60, 60);
 Level level(&ab, 0b11111111);
 
 void setup() {
@@ -29,9 +31,11 @@ void loop() {
 
 void update() {
   player.update();
+  c.update(player.get_center_x(), player.get_center_y());
 }
 
 void draw() {
-  player.draw();
-  level.draw(player.get_map_scroll_x(), player.get_map_scroll_y());
+  player.draw(c.scroll_x(), c.scroll_y());
+  level.draw(c.scroll_x(), c.scroll_y());
+  enemy.draw(c.scroll_x(), c.scroll_y());
 }
