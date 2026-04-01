@@ -22,7 +22,7 @@ class Level {
     uint8_t height;
 
     if (get_map_data() & (1 << 7)) {
-      width = 254;
+      width = 255;
     } else {
       width = 127;
     }
@@ -33,10 +33,10 @@ class Level {
       height = 63;
     }
 
-    ab->fillRect(0 - offset_x, 0 - offset_y, width, 1);
-    ab->fillRect(0 - offset_x, height - offset_y, width, 1);
-    ab->fillRect(0 - offset_x, 0 - offset_y, 1, height);
-    ab->fillRect(width - offset_x, 0 - offset_y, 1, height + 1);
+    ab->fillRect(0 - offset_x, 0 - offset_y, width, 1); // Top wall
+    ab->fillRect(0 - offset_x, height - offset_y, width, 1); // Bottom wall
+    ab->fillRect(0 - offset_x, 0 - offset_y, 1, height); //Left wall
+    ab->fillRect(width - offset_x, 0 - offset_y, 1, height + 1); // Right wall
   }
 };
 
