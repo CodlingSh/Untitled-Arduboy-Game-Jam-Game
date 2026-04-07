@@ -11,11 +11,14 @@
 
 #include <Arduboy2.h>
 #include "compass.h"
+#include "player.h"
 
 Arduboy2 ab;
+Player player(&ab);
 Compass compass(&ab);
 uint8_t currentLives;
 uint16_t score;
+
 void setup() {
   ab.begin();
   ab.setFrameRate(60);
@@ -29,6 +32,8 @@ void loop() {
   ab.pollButtons();
   ab.clear();
 
+  player.update();
+  player.draw();
   compass.draw(currentLives, score);
 
   ab.display();
