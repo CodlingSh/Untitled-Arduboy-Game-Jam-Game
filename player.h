@@ -12,13 +12,28 @@ const uint8_t PROGMEM face[] = {
 class Player {
   private:
     Arduboy2 *ab;
-    uint8_t x = 100;
-    uint8_t y = 30;
-  
+    int8_t x = 100;
+    int8_t y = 30;
+    int8_t xMin = 63;
+    int8_t xMax = 120;
+    int8_t yMin = 0;
+    int8_t yMax = 56;
   public:
     Player(Arduboy2 *ab_ptr) : ab(ab_ptr) {}
 
     void update() {
+      move();
+    }
+
+    uint8_t getY() {
+      return y;
+    }
+
+    void draw() {
+      ab->drawBitmap(x, y, face, 8, 8, WHITE);
+    }
+
+    void move() {
       if (ab->pressed(LEFT_BUTTON)) {
         x--;
       }
@@ -31,10 +46,18 @@ class Player {
       if (ab->pressed(DOWN_BUTTON)) {
         y++;
       }
-    }
 
-    void draw() {
-      ab->drawBitmap(x, y, face, 8, 8, WHITE);
+      if (x < xMin) {
+        x = xMin;
+      } else if (x > xMax) {
+        x = xMax;
+      }
+
+      if (y < yMin) {
+        y = yMin;
+      } else if (y > yMax) {
+        y = yMax;
+      }
     }
 };
 

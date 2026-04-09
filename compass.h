@@ -41,6 +41,9 @@ class Compass {
       ab->fillRect(17, 3, 44, 44);
       ab->drawLine(63, 0, 63, 63);
       ab->drawLine(0, 49, 63, 49);
+      ab->drawLine(64, 0, 127, 0);
+      ab->drawLine(64, 63, 127, 63);
+      ab->drawLine(127, 0, 127, 63);
       drawSquare(15, 1);
       drawSquare(15, 45);
       drawSquare(59, 1);
