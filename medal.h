@@ -18,25 +18,34 @@ const uint8_t PROGMEM starMask[] = {
 class Medal {
   private:
     Arduboy2 *ab;
-    uint8_t x;
-    uint8_t y;
+    uint8_t x = 0;
+    uint8_t y = 0;
 
   public:
     Medal(Arduboy2 *ab_ptr) 
-      : ab(ab_ptr),
-        x(setX()),
-        y(setY()) {}
+      : ab(ab_ptr) {}
 
-    uint8_t setX() {
-      return 2;
+    void setX() {
+      uint8_t rnd = random(8) * 8 + 64;
+      x = rnd;
     }
 
-    uint8_t setY() {
-      return 2;
+    void setY() {
+      uint8_t rnd = random(8) * 8;
+      y = rnd;
+    }
+
+    void spawn() {
+      setX();
+      setY();
     }
 
     void draw() {
-      ab->drawExternalMask(x, y, star, starMask, frame, 0);
+      Sprites::drawExternalMask(x, y, star, starMask, 0, 0);
+      ab->print("X: ");
+      ab->println(x);
+      ab->print("Y: ");
+      ab->println(y);
     }
 };
 
