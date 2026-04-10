@@ -85,6 +85,6 @@ class Score {
 
     }
 
-}
+};
 
 #endif
