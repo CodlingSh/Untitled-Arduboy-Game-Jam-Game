@@ -25,6 +25,10 @@ class Player {
       move();
     }
 
+    uint8_t getX() {
+      return x;
+    }
+
     uint8_t getY() {
       return y;
     }

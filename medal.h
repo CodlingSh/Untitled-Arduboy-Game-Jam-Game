@@ -25,19 +25,33 @@ class Medal {
     Medal(Arduboy2 *ab_ptr) 
       : ab(ab_ptr) {}
 
-    void setX() {
+    uint8_t setX() {
       uint8_t rnd = random(8) * 8 + 64;
-      x = rnd;
+      return rnd;
     }
 
-    void setY() {
+    uint8_t setY() {
       uint8_t rnd = random(8) * 8;
-      y = rnd;
+      return rnd;
     }
 
-    void spawn() {
-      setX();
-      setY();
+    void spawn(uint8_t playerX, uint8_t playerY) {
+      uint8_t rndX;
+      uint8_t rndY;
+
+      rndX = random(8) * 8 + 64;
+      rndY = random(8) * 8;
+
+      while ((rndX - (playerX + 4) * -1) <= 16) {
+        rndX = random(8) * 8 + 64;
+      }
+
+      while ((rndY - (playerY + 4) * -1) <= 16) {
+        rndY = random(8) * 8;
+      }
+
+      x = rndX;
+      y = rndY;
     }
 
     void draw() {

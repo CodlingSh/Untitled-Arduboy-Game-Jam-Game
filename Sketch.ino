@@ -25,7 +25,6 @@ uint8_t gameState;
 
 void setup() {
   ab.begin();
-  ab.initRandomSeed();
   ab.setFrameRate(60);
   currentLives = 3;
   score = 0;
@@ -44,7 +43,8 @@ void loop() {
       ab.println("TITLE SCREEN");
 
       if (ab.justPressed(A_BUTTON) || ab.justPressed(B_BUTTON)) {
-        medal.spawn();
+        ab.initRandomSeed();
+        medal.spawn(player.getX(), player.getY());
         gameState = 1;
       }
       break;
