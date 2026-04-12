@@ -12,10 +12,10 @@ const uint8_t PROGMEM face[] = {
 class Player {
   private:
     Arduboy2 *ab;
-    int8_t x = 100;
+    int8_t x = 30;
     int8_t y = 30;
-    int8_t xMin = 63;
-    int8_t xMax = 120;
+    int8_t xMin = 0;
+    int8_t xMax = 56;
     int8_t yMin = 0;
     int8_t yMax = 56;
   public:
