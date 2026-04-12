@@ -14,11 +14,13 @@
 #include "player.h"
 #include "medal.h"
 #include "score.h"
+#include "cloudMap.h"
 
 Arduboy2 ab;
 Player player(&ab);
 Compass compass(&ab);
 Medal medal(&ab);
+CloudMap clouds;
 uint8_t currentLives;
 uint16_t score;
 uint8_t gameState;
@@ -51,12 +53,12 @@ void loop() {
     case 1:
       player.update();
       player.draw();
+      clouds.update();
+      clouds.draw();
       compass.draw(currentLives, score);
       medal.draw();
       break;
   }
-
-  
 
   ab.display();
 }
