@@ -39,7 +39,7 @@ class Medal {
       uint8_t rndX;
       uint8_t rndY;
 
-      rndX = random(8) * 8 + 64;
+      rndX = random(8) * 8;
       rndY = random(8) * 8;
 
       while ((rndX - (playerX + 4) * -1) <= 16) {
@@ -56,10 +56,10 @@ class Medal {
 
     void draw() {
       Sprites::drawExternalMask(x, y, star, starMask, 0, 0);
-      ab->print("X: ");
-      ab->println(x);
-      ab->print("Y: ");
-      ab->println(y);
+      // ab->print("X: ");
+      // ab->println(x);
+      // ab->print("Y: ");
+      // ab->println(y);
     }
 };
 
