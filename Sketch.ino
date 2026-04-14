@@ -22,14 +22,13 @@ Compass compass(&ab);
 Medal medal(&ab);
 CloudMap clouds;
 uint8_t currentLives;
-uint16_t score;
+Score score;
 uint8_t gameState;
 
 void setup() {
   ab.begin();
   ab.setFrameRate(60);
   currentLives = 3;
-  score = 0;
   gameState = 0;
 }
 
@@ -55,7 +54,8 @@ void loop() {
       player.draw();
       clouds.update();
       clouds.draw();
-      compass.draw(currentLives, score);
+      compass.draw(currentLives);
+      score.draw();
       medal.draw();
       break;
   }

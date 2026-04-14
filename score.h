@@ -72,17 +72,68 @@ const uint8_t PROGMEM zero[] = {
   0x07, 0x0f, 0x1f, 0x1e, 0x1c, 0x1e, 0x1f, 0x0f, 0x07, 0x01,
 };
 
+// 12x16, 1 frame(s), 24 bytes
+// Example: Arduboy2Base::drawBitmap(x, y, bigMedal, 12, 16, WHITE);
+const uint8_t PROGMEM bigMedal[] = {
+  0x60, 0x90, 0x48, 0xc4, 0xc2, 0xc1, 0x3d, 0x3a, 0x34, 0x28, 0x90, 0x60,
+  0x00, 0x00, 0x01, 0x02, 0x05, 0x0b, 0x08, 0x04, 0x02, 0x01, 0x00, 0x00,
+};
+
 class Score {
   private:
-    uint16_t currScore = 0;
+    uint8_t onesScore = 7;
+    uint8_t tensScore = 0;
+    uint8_t hundredsScore = 0;
+    uint8_t thousandsScore = 0;
   
   public:
-    void upScore() {
-      currScore++;
+    void resetScore() {
+      onesScore = 0;
+      tensScore = 0;
+      hundredsScore = 0;
+      thousandsScore = 0;
+    }
+
+    void incScore() {
+      onesScore++;
     }
 
     void draw() {
-
+      // Draw medal icon
+      Arduboy2Base::drawBitmap(65, 49, bigMedal, 12, 16, WHITE);
+      // Draw score
+      switch(onesScore) {
+        case 0:
+          Arduboy2Base::drawBitmap(82, 49, zero, 11, 16, WHITE);
+          break;
+        case 1:
+          Arduboy2Base::drawBitmap(82, 49, one, 11, 16, WHITE);
+          break;
+        case 2:
+          Arduboy2Base::drawBitmap(82, 49, two, 11, 16, WHITE);
+          break;
+        case 3:
+          Arduboy2Base::drawBitmap(82, 49, three, 11, 16, WHITE);
+          break;
+        case 4:
+          Arduboy2Base::drawBitmap(82, 49, four, 11, 16, WHITE);
+          break;
+        case 5:
+          Arduboy2Base::drawBitmap(82, 49, five, 11, 16, WHITE);
+          break;
+        case 6:
+          Arduboy2Base::drawBitmap(82, 49, six, 11, 16, WHITE);
+          break;
+        case 7:
+          Arduboy2Base::drawBitmap(82, 49, seven, 11, 16, WHITE);
+          break;
+        case 8:
+          Arduboy2Base::drawBitmap(82, 49, eight, 11, 16, WHITE);
+          break;
+        case 9:
+          Arduboy2Base::drawBitmap(82, 49, nine, 11, 16, WHITE);
+          break;
+      }
     }
 
 };

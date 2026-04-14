@@ -67,11 +67,12 @@ const uint8_t PROGMEM arrowRight[] = {
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-// 11x16, 1 frame(s), 22 bytes
-// Example: Arduboy2Base::drawBitmap(x, y, heart, 11, 16, WHITE);
+// 14x16, 1 frame(s), 28 bytes
+// Example: Arduboy2Base::drawBitmap(x, y, heart, 14, 16, WHITE);
 const uint8_t PROGMEM heart[] = {
-  0x1c, 0x3e, 0x7f, 0xff, 0xfe, 0xfc, 0xfe, 0xff, 0x7f, 0x3e, 0x1c, 0x00,
-  0x00, 0x00, 0x00, 0x01, 0x03, 0x01, 0x00, 0x00, 0x00, 0x00,
+  0x38, 0x7c, 0xfe, 0xff, 0xff, 0xfe, 0xfc, 0xfc, 0xfe, 0xff, 0xff, 0xfe,
+  0x7c, 0x38, 0x00, 0x00, 0x00, 0x01, 0x03, 0x07, 0x0f, 0x0f, 0x07, 0x03,
+  0x01, 0x00, 0x00, 0x00,
 };
 
 class Compass {
@@ -85,27 +86,24 @@ class Compass {
   public:
     Compass(Arduboy2 *ab_ptr) : ab(ab_ptr) {}
 
-    void draw(uint8_t lives, uint16_t score) {
+    void draw(uint8_t lives) {
       // Draw compass container
       ab->fillRect(63, 0, 64, 64, BLACK);
-      ab->drawRect(63, 0, 50, 50);
-      ab->fillRect(66, 3, 44, 44);
+      ab->drawRect(63, 0, 48, 48);
+      ab->fillRect(65, 2, 44, 44);
       // 4 corners decor
-      ab->fillRect(66, 3, 2, 2, BLACK);
-      ab->fillRect(66, 45, 2, 2, BLACK);
-      ab->fillRect(108, 3, 2, 2, BLACK);
-      ab->fillRect(108, 45, 2, 2, BLACK);
+      ab->fillRect(65, 2, 3, 3, BLACK);
+      ab->fillRect(65, 43, 3, 3, BLACK);
+      ab->fillRect(106, 2, 3, 3, BLACK);
+      ab->fillRect(106, 43, 3, 3, BLACK);
       ab->fillRect(65, 2, 2, 2);
-      ab->fillRect(65, 46, 2, 2);
-      ab->fillRect(109, 2, 2, 2);
-      ab->fillRect(109, 46, 2, 2);
-      // finishing the line on the left and right of compass
-      ab->drawLine(63, 50, 63, 63);
-      ab->drawLine(113, 49, 227, 49);
-      ab->drawLine(63, 50, 63, 63);
-      ab->drawLine(113, 0, 126, 0);
-      // Line down far right side
-      ab->drawLine(127, 0, 127, 63);
+      ab->fillRect(65, 44, 2, 2);
+      ab->fillRect(107, 2, 2, 2);
+      ab->fillRect(107, 44, 2, 2);
+      // Lives rect
+      ab->drawRect(110, 0, 18, 48);
+      // Score rect
+      ab->drawRect(63, 47, 65, 17);
       // sides of the play area
       ab->drawLine(0, 63, 62, 63);
       ab->drawLine(0, 0, 63, 0);
@@ -116,7 +114,7 @@ class Compass {
 
       // Draw lives
       for (uint8_t i = 0; i < lives; i++) {
-        Arduboy2Base::drawBitmap(114, 5 + (i * 15), heart, 11, 16, WHITE);
+        Arduboy2Base::drawBitmap(112, 3 + (i * 15), heart, 14, 16, WHITE);
       }
     }
 };
