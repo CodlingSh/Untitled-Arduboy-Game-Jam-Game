@@ -29,12 +29,11 @@ const uint8_t PROGMEM four[] = {
   0x03, 0x03, 0x03, 0x03, 0x01, 0x0f, 0x1f, 0x1f, 0x0e, 0x00,
 };
 
-// 16x16, 1 frame(s), 32 bytes
-// Example: Arduboy2Base::drawBitmap(x, y, five, 16, 16, WHITE);
+// 11x16, 1 frame(s), 22 bytes
+// Example: Arduboy2Base::drawBitmap(x, y, five, 11, 16, WHITE);
 const uint8_t PROGMEM five[] = {
   0x00, 0x0e, 0x7e, 0x7e, 0x7e, 0x6f, 0xef, 0xef, 0xcf, 0xcf, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x0f, 0x0f, 0x1e, 0x1e, 0x1e, 0x1f,
-  0x0f, 0x0f, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x06, 0x0f, 0x0f, 0x1e, 0x1e, 0x1e, 0x1f, 0x0f, 0x0f, 0x07,
 };
 
 // 11x16, 1 frame(s), 22 bytes
@@ -81,10 +80,13 @@ const uint8_t PROGMEM bigMedal[] = {
 
 class Score {
   private:
-    uint8_t onesScore = 7;
+    uint8_t onesScore = 0;
     uint8_t tensScore = 0;
     uint8_t hundredsScore = 0;
     uint8_t thousandsScore = 0;
+    boolean tensVis = false;
+    boolean hundredsVis = false;
+    boolean thousandsVis = false;
   
   public:
     void resetScore() {
@@ -96,46 +98,188 @@ class Score {
 
     void incScore() {
       onesScore++;
+      if (onesScore > 9) {
+        onesScore = 0;
+        tensVis = true;
+        tensScore++;
+      }
+
+      if (tensScore > 9) {
+        tensScore = 0;
+        hundredsVis = true;
+        hundredsScore++;
+      }
+
+      if (hundredsScore > 9) {
+        hundredsScore = 0;
+        thousandsVis = true;
+        thousandsScore++;
+      }
+      
     }
 
     void draw() {
+      uint8_t *onesSpr = zero, *tensSpr = zero, *hundredsSpr = zero, *thousandsSpr = zero;
+      uint8_t onesX = 78, tensX = 78, hundredsX = 78, thousandsX = 78;
+
+      if (thousandsVis) {
+        onesX += 12;
+        tensX += 12;
+        hundredsX += 12;
+      }
+      if (hundredsVis) {
+        onesX += 12;
+        tensX += 12;
+      }
+      if (tensVis) {
+        onesX += 12;
+      }
+
       // Draw medal icon
       Arduboy2Base::drawBitmap(65, 49, bigMedal, 12, 16, WHITE);
-      // Draw score
+
+      // Draw score for ones
       switch(onesScore) {
         case 0:
-          Arduboy2Base::drawBitmap(82, 49, zero, 11, 16, WHITE);
+          onesSpr = zero;
           break;
         case 1:
-          Arduboy2Base::drawBitmap(82, 49, one, 11, 16, WHITE);
+          onesSpr = one;
           break;
         case 2:
-          Arduboy2Base::drawBitmap(82, 49, two, 11, 16, WHITE);
+          onesSpr = two;
           break;
         case 3:
-          Arduboy2Base::drawBitmap(82, 49, three, 11, 16, WHITE);
+          onesSpr = three;
           break;
         case 4:
-          Arduboy2Base::drawBitmap(82, 49, four, 11, 16, WHITE);
+          onesSpr = four;
           break;
         case 5:
-          Arduboy2Base::drawBitmap(82, 49, five, 11, 16, WHITE);
+          onesSpr = five;
           break;
         case 6:
-          Arduboy2Base::drawBitmap(82, 49, six, 11, 16, WHITE);
+          onesSpr = six;
           break;
         case 7:
-          Arduboy2Base::drawBitmap(82, 49, seven, 11, 16, WHITE);
+          onesSpr = seven;
           break;
         case 8:
-          Arduboy2Base::drawBitmap(82, 49, eight, 11, 16, WHITE);
+          onesSpr = eight;
           break;
         case 9:
-          Arduboy2Base::drawBitmap(82, 49, nine, 11, 16, WHITE);
+          onesSpr = nine;
           break;
       }
-    }
 
+      // Draw score for tens
+      switch(tensScore) {
+        case 0:
+          tensSpr = zero;
+          break;
+        case 1:
+          tensSpr = one;
+          break;
+        case 2:
+          tensSpr = two;
+          break;
+        case 3:
+          tensSpr = three;
+          break;
+        case 4:
+          tensSpr = four;
+          break;
+        case 5:
+          tensSpr = five;
+          break;
+        case 6:
+          tensSpr = six;
+          break;
+        case 7:
+          tensSpr = seven;
+          break;
+        case 8:
+          tensSpr = eight;
+          break;
+        case 9:
+          tensSpr = nine;
+          break;
+      }
+
+      // Draw score for hundreds
+      switch(hundredsScore) {
+        case 0:
+          hundredsSpr = zero;
+          break;
+        case 1:
+          hundredsSpr = one;
+          break;
+        case 2:
+          hundredsSpr = two;
+          break;
+        case 3:
+          hundredsSpr = three;
+          break;
+        case 4:
+          hundredsSpr = four;
+          break;
+        case 5:
+          hundredsSpr = five;
+          break;
+        case 6:
+          hundredsSpr = six;
+          break;
+        case 7:
+          hundredsSpr = seven;
+          break;
+        case 8:
+          hundredsSpr = eight;
+          break;
+        case 9:
+          hundredsSpr = nine;
+          break;
+      }
+
+      // Draw score for ones
+      switch(thousandsScore) {
+        case 0:
+          thousandsSpr = zero;
+          break;
+        case 1:
+          thousandsSpr = one;
+          break;
+        case 2:
+          thousandsSpr = two;
+          break;
+        case 3:
+          thousandsSpr = three;
+          break;
+        case 4:
+          thousandsSpr = four;
+          break;
+        case 5:
+          thousandsSpr = five;
+          break;
+        case 6:
+          thousandsSpr = six;
+          break;
+        case 7:
+          thousandsSpr = seven;
+          break;
+        case 8:
+          thousandsSpr = eight;
+          break;
+        case 9:
+          thousandsSpr = nine;
+          break;
+      }
+
+      // Draw score
+      Arduboy2Base::drawBitmap(onesX, 49, onesSpr, 11, 16, WHITE);
+      if (tensVis) {Arduboy2Base::drawBitmap(tensX, 49, tensSpr, 11, 16, WHITE);}
+      if (hundredsVis) {Arduboy2Base::drawBitmap(hundredsX, 49, hundredsSpr, 11, 16, WHITE);}
+      if (thousandsVis) {Arduboy2Base::drawBitmap(thousandsX, 49, thousandsSpr, 11, 16, WHITE);}
+    }
 };
 
 #endif
