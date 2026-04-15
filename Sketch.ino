@@ -57,8 +57,15 @@ void loop() {
       compass.draw(currentLives);
       score.draw();
       medal.draw();
+      if (ab.pressed(A_BUTTON)) {
+        score.incScore();
+      }
       break;
   }
 
   ab.display();
+}
+
+boolean collides(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2) {
+  if ()
 }
