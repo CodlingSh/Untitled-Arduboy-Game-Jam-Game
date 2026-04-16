@@ -14,6 +14,8 @@ class Player {
     Arduboy2 *ab;
     int8_t x = 30;
     int8_t y = 30;
+    int8_t height = 8;
+    int8_t width = 8;
     int8_t xMin = 0;
     int8_t xMax = 56;
     int8_t yMin = 0;
@@ -25,12 +27,20 @@ class Player {
       move();
     }
 
-    uint8_t getX() {
+    int8_t getX() {
       return x;
     }
 
-    uint8_t getY() {
+    int8_t getY() {
       return y;
+    }
+    
+    int8_t getWidth() {
+      return width;
+    }
+
+    int8_t getHeight() {
+      return height;
     }
 
     void draw() {
