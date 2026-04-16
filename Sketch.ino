@@ -57,15 +57,27 @@ void loop() {
       compass.draw(currentLives);
       score.draw();
       medal.draw();
-      if (ab.pressed(A_BUTTON)) {
+      if (collides(player, medal)) {
+        medal.spawn(player.getX(), player.getY());
         score.incScore();
       }
+      ab.println(collides(player, medal));
       break;
   }
 
   ab.display();
 }
 
-boolean collides(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2) {
-  if ()
+template<typename A, typename B>
+bool collides(const A& a, const B& b) {
+  if 
+    (a.getX() + a.getWidth() > b.getX() &&
+    a.getX() < b.getX() + b.getWidth() &&
+    a.getY() + a.getHeight() > b.getY() &&
+    a.getY() < b.getY() + b.getHeight())
+    {
+      return true;
+    }
+  
+  return false;
 }
