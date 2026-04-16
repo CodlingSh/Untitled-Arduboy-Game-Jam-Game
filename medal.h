@@ -18,8 +18,10 @@ const uint8_t PROGMEM starMask[] = {
 class Medal {
   private:
     Arduboy2 *ab;
-    uint8_t x = 0;
-    uint8_t y = 0;
+    int8_t x = 0;
+    int8_t y = 0;
+    int8_t height = 8;
+    int8_t width = 8;
 
   public:
     Medal(Arduboy2 *ab_ptr) 
@@ -35,19 +37,35 @@ class Medal {
       return rnd;
     }
 
+    int8_t getX() {
+      return x;
+    }
+
+    int8_t getY() {
+      return y;
+    }
+
+    int8_t getWidth() {
+      return width;
+    }
+
+    int8_t getHeight() {
+      return height;
+    }
+
     void spawn(uint8_t playerX, uint8_t playerY) {
       uint8_t rndX;
       uint8_t rndY;
 
-      rndX = random(8) * 8;
-      rndY = random(8) * 8;
+      rndX = random(52) + 2;
+      rndY = random(52) + 2;
 
-      while ((rndX - (playerX + 4) * -1) <= 16) {
-        rndX = random(8) * 8 + 64;
+      while (abs(rndX - (playerX + 4)) <= 20) {
+        rndX = random(52) + 2;
       }
 
-      while ((rndY - (playerY + 4) * -1) <= 16) {
-        rndY = random(8) * 8;
+      while ((abs(rndX - (playerX + 4)) <= 20)) {
+        rndY = random(52) + 2;
       }
 
       x = rndX;
