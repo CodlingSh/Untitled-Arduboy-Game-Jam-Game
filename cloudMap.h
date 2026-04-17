@@ -15,6 +15,8 @@ const uint8_t PROGMEM cloudMask[] = {
 
 // Cloud maps
 const uint16_t map1[16] = {
+  0b0000000000000000,
+  0b0000000000000000,
   0b0011100000000000,
   0b0000000000000000,
   // 0b1110101010101111,
@@ -42,7 +44,7 @@ class CloudMap {
   public:
 
     void update() {
-      yOffset -= 0.25;
+      // yOffset -= 0.25;
     }
 
     void draw() {
@@ -54,6 +56,10 @@ class CloudMap {
         }
       }
       // Sprites::drawExternalMask(20, 10, cloud, cloudMask, 0, 0);
+    }
+
+    uint16_t getMap() {
+      return map1;
     }
 };
 
