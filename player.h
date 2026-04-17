@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <Arduboy2.h>
+#include "cloudMap.h"
 
 // 8x8, 1 frame(s), 8 bytes
 // Example: Arduboy2Base::drawBitmap(x, y, face, 8, 8, WHITE);
@@ -20,11 +21,17 @@ class Player {
     int8_t xMax = 56;
     int8_t yMin = 0;
     int8_t yMax = 56;
+
+    
   public:
     Player(Arduboy2 *ab_ptr) : ab(ab_ptr) {}
 
     void update() {
       move();
+    }
+
+    void draw() {
+      ab->drawBitmap(x, y, face, 8, 8, WHITE);
     }
 
     int8_t getX() {
@@ -43,8 +50,18 @@ class Player {
       return height;
     }
 
-    void draw() {
-      ab->drawBitmap(x, y, face, 8, 8, WHITE);
+    bool cloudCollide(const uint16_t clouds[]) {
+      // ab->drawRect(x / 8 * 8, y / 8 * 8, 8, 8);
+      uint8_t gridX = x / 8;
+      uint8_t gridY = y / 8;
+
+      // Check top left
+      if ((clouds[gridY] >> (15 - gridX)) & 1 == 1) {
+        y = gridY * 8 + 8;
+        return true;
+      }
+
+      return false;
     }
 
     void move() {
