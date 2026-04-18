@@ -56,12 +56,15 @@ void loop() {
       clouds.draw();
       compass.draw(currentLives);
       score.draw();
+      medal.update();
       medal.draw();
       if (collides(player, medal)) {
+        score.incScore(medal.getTimerScore());
         medal.spawn(player.getX(), player.getY());
-        score.incScore();
       }
-      ab.println(collides(player, medal));
+      // ab.println(collides(player, medal));
+      ab.print("SCORE: ");
+      ab.print(score.getScore());
       break;
   }
 
