@@ -22,6 +22,8 @@ class Medal {
     int8_t y = 0;
     int8_t height = 8;
     int8_t width = 8;
+    int8_t timer = 41;
+    int8_t localT = 40;
 
   public:
     Medal(Arduboy2 *ab_ptr) 
@@ -64,20 +66,41 @@ class Medal {
         rndX = random(52) + 2;
       }
 
-      while ((abs(rndX - (playerX + 4)) <= 20)) {
+      while ((abs(rndY - (playerY + 4)) <= 20)) {
         rndY = random(52) + 2;
       }
 
       x = rndX;
       y = rndY;
+      timer = 41;
+      localT = 40;
+    }
+
+    int8_t getTimerScore() {
+      return timer + 1;
+    }
+
+    void update() {
+      localT--;
+      
+      if (localT <= 0) {
+        timer--;
+        if (timer < 0) {
+          timer = 0;
+        }
+        localT = 2;
+      }
     }
 
     void draw() {
       Sprites::drawExternalMask(x, y, star, starMask, 0, 0);
       // ab->print("X: ");
       // ab->println(x);
-      // ab->print("Y: ");
-      // ab->println(y);
+      ab->println(localT);
+      ab->println(timer);
+      
+      // Draw timer bar
+      ab->fillRect(65, 43 - timer, 4, 1 + timer);
     }
 };
 
