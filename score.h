@@ -80,6 +80,7 @@ const uint8_t PROGMEM bigMedal[] = {
 
 class Score {
   private:
+    int16_t score = 0;
     uint8_t onesScore = 0;
     uint8_t tensScore = 0;
     uint8_t hundredsScore = 0;
@@ -90,14 +91,16 @@ class Score {
   
   public:
     void resetScore() {
+      score = 0;
       onesScore = 0;
       tensScore = 0;
       hundredsScore = 0;
       thousandsScore = 0;
     }
 
-    void incScore() {
-      onesScore++;
+    void incScore(int8_t points) {
+      score += points;
+
       if (onesScore > 9) {
         onesScore = 0;
         tensVis = true;
@@ -279,6 +282,10 @@ class Score {
       if (tensVis) {Arduboy2Base::drawBitmap(tensX, 49, tensSpr, 11, 16, WHITE);}
       if (hundredsVis) {Arduboy2Base::drawBitmap(hundredsX, 49, hundredsSpr, 11, 16, WHITE);}
       if (thousandsVis) {Arduboy2Base::drawBitmap(thousandsX, 49, thousandsSpr, 11, 16, WHITE);}
+    }
+
+    int16_t getScore() {
+      return score;
     }
 };
 
