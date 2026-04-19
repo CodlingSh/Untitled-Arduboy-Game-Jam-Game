@@ -18,12 +18,12 @@ const uint8_t PROGMEM starMask[] = {
 class Medal {
   private:
     Arduboy2 *ab;
-    int8_t x = 0;
-    int8_t y = 0;
-    int8_t height = 8;
-    int8_t width = 8;
-    int8_t timer = 41;
-    int8_t localT = 40;
+    uint8_t x = 0;
+    uint8_t y = 0;
+    uint8_t height = 8;
+    uint8_t width = 8;
+    uint8_t timer = 42;
+    uint8_t localT = 60;
 
   public:
     Medal(Arduboy2 *ab_ptr) 
@@ -39,19 +39,19 @@ class Medal {
       return rnd;
     }
 
-    int8_t getX() {
+    uint8_t getX() {
       return x;
     }
 
-    int8_t getY() {
+    uint8_t getY() {
       return y;
     }
 
-    int8_t getWidth() {
+    uint8_t getWidth() {
       return width;
     }
 
-    int8_t getHeight() {
+    uint8_t getHeight() {
       return height;
     }
 
@@ -72,23 +72,23 @@ class Medal {
 
       x = rndX;
       y = rndY;
-      timer = 41;
-      localT = 40;
+      timer = 42;
+      localT = 60;
     }
 
-    int8_t getTimerScore() {
+    uint8_t getTimerScore() {
       return timer + 1;
     }
 
     void update() {
-      localT--;
       
-      if (localT <= 0) {
-        timer--;
-        if (timer < 0) {
-          timer = 0;
+      if (timer != 0) {localT--;}
+      
+      if (localT == 0) {
+        if (timer != 0) {
+          timer--;
+          localT = 3;
         }
-        localT = 2;
       }
     }
 
@@ -100,7 +100,7 @@ class Medal {
       ab->println(timer);
       
       // Draw timer bar
-      ab->fillRect(65, 43 - timer, 4, 1 + timer);
+      ab->fillRect(65, 44 - timer, 4, 0 + timer);
     }
 };
 
