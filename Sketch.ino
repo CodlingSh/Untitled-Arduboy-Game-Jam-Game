@@ -63,8 +63,6 @@ void loop() {
         medal.spawn(player.getX(), player.getY());
       }
       // ab.println(collides(player, medal));
-      ab.print("SCORE: ");
-      ab.print(score.getScore());
       break;
   }
 
