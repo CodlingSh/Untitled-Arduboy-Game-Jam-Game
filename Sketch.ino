@@ -9,6 +9,16 @@
   Top-down game where you avoid getting crushed between edged of the screen and clouds
 */
 
+// TODO
+// Animate player sprite
+// Move clouds with a nice linear acceleration and decelleration
+// Rotate arrow and change wind direction
+// Cause life to be lost when crushed against wall by cloud
+// Make nice title screen
+// add instructions
+// add music and sound effects
+// Adjust score values to closer match 1 - 50 and not 1 - 42
+
 #include <Arduboy2.h>
 #include "compass.h"
 #include "player.h"
