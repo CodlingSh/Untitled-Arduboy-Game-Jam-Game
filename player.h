@@ -10,6 +10,30 @@ const uint8_t PROGMEM face[] = {
   0x7e, 0xff, 0xd3, 0xbf, 0xbf, 0xd3, 0xff, 0x7e,
 };
 
+// 8x8, 1 frame(s)
+// Image: 10 bytes, Mask: 8 bytes
+// Example: Sprites::drawExternalMask(x, y, hero, heroMask, frame, 0);
+const uint8_t PROGMEM heroRight[] = {
+  8, 8,
+  0x20, 0x10, 0xff, 0xb5, 0x37, 0xfd, 0x90, 0x20,
+};
+
+const uint8_t PROGMEM heroMaskRight[] = {
+  0x20, 0x10, 0xff, 0xbf, 0x3f, 0xff, 0x90, 0x20,
+};
+
+// 8x8, 1 frame(s)
+// Image: 10 bytes, Mask: 8 bytes
+// Example: Sprites::drawExternalMask(x, y, hero, heroMask, frame, 0);
+const uint8_t PROGMEM heroLeft[] = {
+  8, 8,
+  0x20, 0x10, 0xfd, 0x37, 0x35, 0xff, 0x10, 0x20,
+};
+
+const uint8_t PROGMEM heroMaskLeft[] = {
+  0x20, 0x10, 0xff, 0x3f, 0x3f, 0xff, 0x10, 0x20,
+};
+
 class Player {
   private:
     Arduboy2 *ab;
@@ -21,7 +45,8 @@ class Player {
     int8_t xMax = 56;
     int8_t yMin = 0;
     int8_t yMax = 56;
-
+    uint8_t *currSpr = heroRight;
+    uint8_t *currMask = heroMaskRight;
     
   public:
     Player(Arduboy2 *ab_ptr) : ab(ab_ptr) {}
@@ -31,7 +56,8 @@ class Player {
     }
 
     void draw() {
-      ab->drawBitmap(x, y, face, 8, 8, WHITE);
+
+      Sprites::drawExternalMask(x, y, currSpr, currMask, 0, 0);
     }
 
     int8_t getX() {
