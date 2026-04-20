@@ -146,7 +146,47 @@ class Score {
     }
 
     void draw() {
-      Arduboy2Base::drawBitmap(78, 49, getSprite(onesScore), 11, 16, WHITE);
+       uint8_t onesX = 66, tensX = 66, hundredsX = 66, thousandsX = 66, tenthousandsX = 66;
+
+      if (tenthousandsVis) {
+        onesX += 12;
+        tensX += 12;
+        hundredsX += 12;
+        thousandsX += 12;
+      }
+      if (thousandsVis) {
+        onesX += 12;
+        tensX += 12;
+        hundredsX += 12;
+      }
+      if (hundredsVis) {
+        onesX += 12;
+        tensX += 12;
+      }
+      if (tensVis) {
+        onesX += 12;
+      }
+
+      // Check what digits to display
+      if (score > 9) {
+        tensVis = true;
+      } 
+      if (score > 99) {
+        hundredsVis = true;
+      }
+      if (score > 999) {
+        thousandsVis = true;
+      }
+      if (score > 9999) {
+        tenthousandsVis = true;
+      }
+
+
+      Arduboy2Base::drawBitmap(onesX, 49, getSprite(onesScore), 11, 16, WHITE);
+      if (tensVis) {Arduboy2Base::drawBitmap(tensX, 49, getSprite(tensScore), 11, 16, WHITE);}
+      if (hundredsVis) {Arduboy2Base::drawBitmap(hundredsX, 49, getSprite(hundredsScore), 11, 16, WHITE);}
+      if (thousandsVis) {Arduboy2Base::drawBitmap(thousandsX, 49, getSprite(thousandsScore), 11, 16, WHITE);}
+      if (tenthousandsVis) {Arduboy2Base::drawBitmap(tenthousandsX, 49, getSprite(tenthousandsScore), 11, 16, WHITE);}
     }
 
     int16_t getScore() {
