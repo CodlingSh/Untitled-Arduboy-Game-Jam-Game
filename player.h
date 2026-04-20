@@ -24,27 +24,28 @@ const uint8_t PROGMEM heroMaskRight[] = {
 
 // 8x8, 1 frame(s)
 // Image: 10 bytes, Mask: 8 bytes
-// Example: Sprites::drawExternalMask(x, y, hero, heroMask, frame, 0);
+// Example: Sprites::drawExternalMask(x, y, player, playerMask, frame, 0);
 const uint8_t PROGMEM heroLeft[] = {
   8, 8,
-  0x20, 0x10, 0xfd, 0x37, 0x35, 0xff, 0x10, 0x20,
+  0x20, 0x90, 0xfd, 0x37, 0xb5, 0xff, 0x10, 0x20,
 };
 
 const uint8_t PROGMEM heroMaskLeft[] = {
-  0x20, 0x10, 0xff, 0x3f, 0x3f, 0xff, 0x10, 0x20,
+  0x20, 0x90, 0xff, 0x3f, 0xbf, 0xff, 0x10, 0x20,
 };
 
 class Player {
   private:
     Arduboy2 *ab;
-    int8_t x = 30;
-    int8_t y = 30;
-    int8_t height = 8;
-    int8_t width = 8;
-    int8_t xMin = 0;
-    int8_t xMax = 56;
-    int8_t yMin = 0;
-    int8_t yMax = 56;
+    uint8_t x = 30;
+    uint8_t y = 30;
+    uint8_t height = 8;
+    uint8_t width = 8;
+    uint8_t xMin = 0;
+    uint8_t xMax = 56;
+    uint8_t yMin = 0;
+    uint8_t yMax = 56;
+    boolean lastDirLeft = true;
     uint8_t *currSpr = heroRight;
     uint8_t *currMask = heroMaskRight;
     
@@ -53,10 +54,22 @@ class Player {
 
     void update() {
       move();
+
+      if (ab->pressed(LEFT_BUTTON)) {
+        lastDirLeft = true;
+      } else if (ab->pressed(RIGHT_BUTTON)) {
+        lastDirLeft = false;
+      }
     }
 
     void draw() {
-
+      if (lastDirLeft) {
+        currSpr = heroLeft;
+        currMask = heroMaskLeft;
+      } else {
+        currSpr = heroRight;
+        currMask = heroMaskRight;
+      }
       Sprites::drawExternalMask(x, y, currSpr, currMask, 0, 0);
     }
 
