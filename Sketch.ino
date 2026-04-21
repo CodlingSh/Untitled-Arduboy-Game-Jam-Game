@@ -30,7 +30,7 @@ Arduboy2 ab;
 Player player(&ab);
 Compass compass(&ab);
 Medal medal(&ab);
-CloudMap clouds;
+CloudMap clouds(&compass);
 uint8_t currentLives;
 Score score;
 uint8_t gameState;
