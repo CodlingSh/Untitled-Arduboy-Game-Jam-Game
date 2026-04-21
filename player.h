@@ -41,10 +41,10 @@ class Player {
     uint8_t y = 30;
     uint8_t height = 8;
     uint8_t width = 8;
-    uint8_t xMin = 0;
-    uint8_t xMax = 56;
-    uint8_t yMin = 0;
-    uint8_t yMax = 56;
+    uint8_t xMin = 1;
+    uint8_t xMax = 55;
+    uint8_t yMin = 1;
+    uint8_t yMax = 55;
     boolean lastDirLeft = true;
     uint8_t *currSpr = heroRight;
     uint8_t *currMask = heroMaskRight;
