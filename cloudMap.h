@@ -1,6 +1,8 @@
 #ifndef CLOUDMAP_H
 #define CLOUDMAP_H
 
+#include "compass.h"
+
 // 8x8, 1 frame(s)
 // Image: 10 bytes, Mask: 8 bytes
 // Example: Sprites::drawExternalMask(x, y, cloud, cloudMask, frame, 0);
@@ -19,6 +21,18 @@ const uint16_t map1[16] = {
   0b0001000000000000,
   0b0011100000000000,
   0b0001000000000000,
+  0b0000000110000000,
+  0b0000000011000000,
+  0b0000000000000000,
+  0b0000000000000000,
+  0b0000000000000000,
+  0b0001000000000000,
+  0b0011100000000000,
+  0b0001000000000000,
+  0b0000000110000000,
+  0b0000000011000000,
+  0b0000000000000000,
+  0b0000000000000000,
   // 0b1110101010101111,
   // 0b0101010101010101,
   // 0b1010101010101010,
@@ -39,6 +53,7 @@ const uint16_t map1[16] = {
 
 class CloudMap {
   private:
+    Compass *compass;
     float xOffset = 0;
     float yOffset = 0;
     float speed = 0.25;
@@ -47,6 +62,7 @@ class CloudMap {
     uint8_t secondTimer = 60;
     uint8_t windTimer = 0;
   public:
+    CloudMap(Compass *com_ptr) : compass(com_ptr) {}
 
     void update() {
       // yOffset -= 0.25;
@@ -55,27 +71,42 @@ class CloudMap {
 
         if (secondTimer == 0) {
           windBlowing = true;
+          windTimer = 2;//random(2, 5);
           secondTimer = 60;
         }
       }
 
       if (windBlowing == true && windDirection == 5) {
         windDirection = random(4);
-      }
-        
+        compass->changeDir(windDirection);
+      }        
 
       switch(windDirection) {
         case 0: // North
           yOffset += speed;
           break;
         case 1: // East
-          xOffset += speed;
+          xOffset -= speed;
           break;
         case 2: // South
           yOffset -= speed;
           break;
         case 3: // West
-          xOffset -= speed;
+          xOffset += speed;
+      }
+
+      if (windBlowing == true) {
+        secondTimer--;
+
+        if (secondTimer == 0) {
+          windTimer--;
+          secondTimer = 60;
+        }
+
+        if (windTimer == 0) {
+          windBlowing = false;
+          windDirection = 5;
+        }
       }
     }
 
