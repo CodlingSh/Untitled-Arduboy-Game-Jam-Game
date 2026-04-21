@@ -77,13 +77,29 @@ const uint8_t PROGMEM heart[] = {
 class Compass {
   private:
     Arduboy2 *ab;
-
-    void drawSquare(uint8_t x, uint8_t y) {
-      ab->fillRect(x, y, 4, 4, BLACK);
-      ab->fillRect(x+1, y+1, 2, 2);
-    }
+    uint8_t *arrowSpr = arrowUp; 
+    
   public:
     Compass(Arduboy2 *ab_ptr) : ab(ab_ptr) {}
+
+    void changeDir(uint8_t dir) {
+      switch(dir) {
+        case 0:
+          arrowSpr = arrowUp;
+          break;
+        case 1:
+          arrowSpr = arrowRight;
+          break;
+        case 2:
+          arrowSpr = arrowDown;
+          break;
+        case 3:
+          arrowSpr = arrowLeft;
+          break;
+        case 5:
+          break;
+      }
+    }
 
     void draw(uint8_t lives) {
       // Draw compass container
@@ -111,7 +127,7 @@ class Compass {
       ab->drawLine(0, 1, 0, 62);
 
       // Draw arrow
-      Arduboy2Base::drawBitmap(77, 7, arrowUp, 32, 32, INVERT);
+      Arduboy2Base::drawBitmap(77, 7, arrowSpr, 32, 32, INVERT);
 
       // Draw lives
       for (uint8_t i = 0; i < lives; i++) {
