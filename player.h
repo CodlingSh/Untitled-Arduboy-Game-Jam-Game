@@ -96,7 +96,7 @@ class Player {
 
       // Check top left
       if ((clouds[gridY] >> (15 - gridX)) & 1 == 1) {
-        y = gridY * 8 + 8;
+        y = gridY * 8 + 8 + 1;
         return true;
       }
 
