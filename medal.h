@@ -144,8 +144,8 @@ class Medal {
       Sprites::drawExternalMask(x, y, star, starMask, currFrame, 0);
       // ab->print("X: ");
       // ab->println(x);
-      ab->println(localT);
-      ab->println(timer);
+      // ab->println(localT);
+      // ab->println(timer);
       
       // Draw timer bar
       ab->fillRect(65, 44 - timer, 4, 0 + timer);
