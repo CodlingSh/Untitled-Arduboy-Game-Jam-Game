@@ -27,10 +27,10 @@
 #include "cloudMap.h"
 
 Arduboy2 ab;
-Player player(&ab);
 Compass compass(&ab);
 Medal medal(&ab);
 CloudMap clouds(&compass);
+Player player(&ab, &clouds);
 uint8_t currentLives;
 Score score;
 uint8_t gameState;
@@ -72,7 +72,10 @@ void loop() {
         score.incScore(medal.getTimerScore());
         medal.spawn(player.getX(), player.getY());
       }
-      // ab.println(collides(player, medal));
+      if (clouds.cloudCollide(player.getX(), player.getY())) {
+        ab.print("T");
+
+      }
       break;
   }
 
