@@ -37,6 +37,7 @@ const uint8_t PROGMEM heroMaskLeft[] = {
 class Player {
   private:
     Arduboy2 *ab;
+    CloudMap *clouds;
     uint8_t x = 30;
     uint8_t y = 30;
     uint8_t height = 8;
@@ -50,7 +51,7 @@ class Player {
     uint8_t *currMask = heroMaskRight;
     
   public:
-    Player(Arduboy2 *ab_ptr) : ab(ab_ptr) {}
+    Player(Arduboy2 *ab_ptr, CloudMap *cloud_ptr) : ab(ab_ptr), clouds(cloud_ptr) {}
 
     void update() {
       move();
@@ -80,6 +81,14 @@ class Player {
     int8_t getY() {
       return y;
     }
+
+    void setX(uint8_t newX) {
+      x = newX;
+    }
+
+    void setY(uint8_t newY) {
+      y = newY;
+    } 
     
     int8_t getWidth() {
       return width;
@@ -89,32 +98,26 @@ class Player {
       return height;
     }
 
-    bool cloudCollide(const uint16_t clouds[]) {
-      // ab->drawRect(x / 8 * 8, y / 8 * 8, 8, 8);
-      uint8_t gridX = x / 8;
-      uint8_t gridY = y / 8;
-
-      // Check top left
-      if ((clouds[gridY] >> (15 - gridX)) & 1 == 1) {
-        y = gridY * 8 + 8 + 1;
-        return true;
-      }
-
-      return false;
-    }
-
     void move() {
       if (ab->pressed(LEFT_BUTTON)) {
-        x--;
+        if (!clouds->cloudCollide(x - 1, y)) {
+          x--;
+        }
       }
       if (ab->pressed(RIGHT_BUTTON)) {
-        x++;
+        if (!clouds->cloudCollide(x + 1, y)) {
+          x++;
+        }
       }
       if (ab->pressed(UP_BUTTON)) {
-        y--;
+        if (!clouds->cloudCollide(x, y - 1)) {
+          y--;
+        }
       }
       if (ab->pressed(DOWN_BUTTON)) {
-        y++;
+        if (!clouds->cloudCollide(x, y + 1)) {
+          y++;
+        }
       }
 
       if (x < xMin) {
