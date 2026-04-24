@@ -38,8 +38,8 @@ class Player {
   private:
     Arduboy2 *ab;
     CloudMap *clouds;
-    uint8_t x = 30;
-    uint8_t y = 30;
+    int8_t x = 30;
+    int8_t y = 30;
     uint8_t height = 8;
     uint8_t width = 8;
     uint8_t xMin = 1;
@@ -60,6 +60,23 @@ class Player {
         lastDirLeft = true;
       } else if (ab->pressed(RIGHT_BUTTON)) {
         lastDirLeft = false;
+      }
+
+      
+      if (clouds->cloudCollide(x - 1, y)) {
+        x++;
+      }
+      
+      if (clouds->cloudCollide(x + 1, y)) {
+        x--;
+      }
+      
+      if (clouds->cloudCollide(x, y - 1)) {
+        y++;
+      }
+      
+      if (clouds->cloudCollide(x, y + 1)) {
+        y--;
       }
     }
 
@@ -120,17 +137,17 @@ class Player {
         }
       }
 
-      if (x < xMin) {
-        x = xMin;
-      } else if (x > xMax) {
-        x = xMax;
-      }
+      // if (x < xMin) {
+      //   x = xMin;
+      // } else if (x > xMax) {
+      //   x = xMax;
+      // }
 
-      if (y < yMin) {
-        y = yMin;
-      } else if (y > yMax) {
-        y = yMax;
-      }
+      // if (y < yMin) {
+      //   y = yMin;
+      // } else if (y > yMax) {
+      //   y = yMax;
+      // }
     }
 };
 
