@@ -105,6 +105,8 @@ class Compass {
       // Draw compass container
       // ab->fillRect(63, 0, 64, 64, BLACK);
       // ab->drawRect(70, 0, 46, 46);
+      ab->fillRect(64, 1, 8, 63, BLACK);
+
       ab->fillRect(72, 2, 45, 45);
       // // 4 corners decor
       // ab->fillRect(72, 2, 3, 3, BLACK);
