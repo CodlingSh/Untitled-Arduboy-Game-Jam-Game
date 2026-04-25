@@ -60,9 +60,9 @@ void loop() {
       }
       break;
     case 1:
+      clouds.update();
       player.update();
       player.draw();
-      clouds.update();
       clouds.draw();
       compass.draw(currentLives);
       score.draw();
@@ -76,6 +76,8 @@ void loop() {
         ab.print("T");
 
       }
+      ab.setCursor(111, 57);
+      ab.print(ab.cpuLoad());
       break;
   }
 
