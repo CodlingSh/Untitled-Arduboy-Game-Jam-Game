@@ -63,21 +63,21 @@ class Player {
       }
 
       
-      if (clouds->cloudCollide(x - 1, y)) {
-        x++;
-      }
+      // if (clouds->cloudCollide(x - 1, y)) {
+      //   x++;
+      // }
       
-      if (clouds->cloudCollide(x + 1, y)) {
-        x--;
-      }
+      // if (clouds->cloudCollide(x + 1, y)) {
+      //   x--;
+      // }
       
-      if (clouds->cloudCollide(x, y - 1)) {
-        y++;
-      }
+      // if (clouds->cloudCollide(x, y - 1)) {
+      //   y++;
+      // }
       
-      if (clouds->cloudCollide(x, y + 1)) {
-        y--;
-      }
+      // if (clouds->cloudCollide(x, y + 1)) {
+      //   y--;
+      // }
     }
 
     void draw() {
