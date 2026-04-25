@@ -182,11 +182,11 @@ class Score {
       }
 
 
-      Arduboy2Base::drawBitmap(onesX, 49, getSprite(onesScore), 11, 16, WHITE);
-      if (tensVis) {Arduboy2Base::drawBitmap(tensX, 49, getSprite(tensScore), 11, 16, WHITE);}
-      if (hundredsVis) {Arduboy2Base::drawBitmap(hundredsX, 49, getSprite(hundredsScore), 11, 16, WHITE);}
-      if (thousandsVis) {Arduboy2Base::drawBitmap(thousandsX, 49, getSprite(thousandsScore), 11, 16, WHITE);}
-      if (tenthousandsVis) {Arduboy2Base::drawBitmap(tenthousandsX, 49, getSprite(tenthousandsScore), 11, 16, WHITE);}
+      Arduboy2Base::drawBitmap(onesX, 51, getSprite(onesScore), 11, 16, WHITE);
+      if (tensVis) {Arduboy2Base::drawBitmap(tensX, 51, getSprite(tensScore), 11, 16, WHITE);}
+      if (hundredsVis) {Arduboy2Base::drawBitmap(hundredsX, 51, getSprite(hundredsScore), 11, 16, WHITE);}
+      if (thousandsVis) {Arduboy2Base::drawBitmap(thousandsX, 51, getSprite(thousandsScore), 11, 16, WHITE);}
+      if (tenthousandsVis) {Arduboy2Base::drawBitmap(tenthousandsX, 51, getSprite(tenthousandsScore), 11, 16, WHITE);}
     }
 
     int16_t getScore() {

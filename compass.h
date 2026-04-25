@@ -103,35 +103,44 @@ class Compass {
 
     void draw(uint8_t lives) {
       // Draw compass container
-      ab->fillRect(63, 0, 64, 64, BLACK);
-      ab->drawRect(70, 0, 46, 46);
-      ab->fillRect(72, 2, 42, 42);
-      // 4 corners decor
-      ab->fillRect(72, 2, 3, 3, BLACK);
-      ab->fillRect(72, 41, 3, 3, BLACK);
-      ab->fillRect(111, 2, 3, 3, BLACK);
-      ab->fillRect(111, 41, 3, 3, BLACK);
-      ab->fillRect(72, 2, 2, 2);
-      ab->fillRect(72, 42, 2, 2);
-      ab->fillRect(112, 2, 2, 2);
-      ab->fillRect(112, 42, 2, 2);
-      // Timer bar
-      ab->drawRect(63, 0, 8, 46);
-      // Lives rect
-      ab->drawRect(115, 0, 13, 46);
-      // Score rect
-      ab->drawRect(63, 45, 65, 19);
-      // sides of the play area
-      ab->drawLine(0, 63, 62, 63);
-      ab->drawLine(0, 0, 63, 0);
-      ab->drawLine(0, 1, 0, 62);
+      // ab->fillRect(63, 0, 64, 64, BLACK);
+      // ab->drawRect(70, 0, 46, 46);
+      ab->fillRect(72, 2, 45, 45);
+      // // 4 corners decor
+      // ab->fillRect(72, 2, 3, 3, BLACK);
+      // ab->fillRect(72, 41, 3, 3, BLACK);
+      // ab->fillRect(111, 2, 3, 3, BLACK);
+      // ab->fillRect(111, 41, 3, 3, BLACK);
+      // ab->fillRect(72, 2, 2, 2);
+      // ab->fillRect(72, 42, 2, 2);
+      // ab->fillRect(112, 2, 2, 2);
+      // ab->fillRect(112, 42, 2, 2);
+      // // Timer bar
+      // ab->drawRect(63, 0, 8, 49);
+      // // Lives rect
+      // ab->drawRect(115, 0, 13, 46);
+      // // Score rect
+      // ab->drawRect(63, 45, 65, 19);
+      // // sides of the play area
+      // ab->drawLine(0, 63, 62, 63);
+      // ab->drawLine(0, 0, 63, 0);
+      // ab->drawLine(0, 1, 0, 62);
+      // ab->drawLine(63, 63, 63, 46);
+      ab->drawFastHLine(0, 0, 128);
+      ab->drawFastVLine(0, 1, 63);
+      ab->drawFastHLine(1, 63, 62);
+      ab->drawFastVLine(63, 1, 63);
+      ab->drawFastHLine(64, 48, 64);
+      ab->drawFastVLine(70, 0, 48);
+      // Decorative lines
+      ab->drawFastHLine(72, 4, 3);
 
       // Draw arrow
-      Arduboy2Base::drawBitmap(77, 7, arrowSpr, 32, 32, INVERT);
+      // Arduboy2Base::drawBitmap(77, 7, arrowSpr, 32, 32, INVERT);
 
       // Draw lives
       for (uint8_t i = 0; i < lives; i++) {
-        Arduboy2Base::drawBitmap(117, 5 + (i * 13), heart, 9, 9, WHITE);
+        Arduboy2Base::drawBitmap(118, 5 + (i * 13), heart, 9, 9, WHITE);
       }
     }
 };
