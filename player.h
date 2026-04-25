@@ -137,17 +137,17 @@ class Player {
         }
       }
 
-      // if (x < xMin) {
-      //   x = xMin;
-      // } else if (x > xMax) {
-      //   x = xMax;
-      // }
+      if (x < xMin) {
+        x = xMin;
+      } else if (x > xMax) {
+        x = xMax;
+      }
 
-      // if (y < yMin) {
-      //   y = yMin;
-      // } else if (y > yMax) {
-      //   y = yMax;
-      // }
+      if (y < yMin) {
+        y = yMin;
+      } else if (y > yMax) {
+        y = yMax;
+      }
     }
 };
 
