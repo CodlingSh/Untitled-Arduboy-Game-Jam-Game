@@ -64,8 +64,9 @@ void loop() {
       player.update();
       player.draw();
       clouds.draw();
-      compass.draw(currentLives);
+      ab.fillRect(64, 1, 8, 63, BLACK);
       score.draw();
+      compass.draw(currentLives);
       medal.update();
       medal.draw();
       if (collides(player, medal)) {
