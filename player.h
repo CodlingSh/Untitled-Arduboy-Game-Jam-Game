@@ -62,7 +62,9 @@ class Player {
         lastDirLeft = false;
       }
 
-      
+      if (clouds->cloudCollide(x, y)) {
+        
+      }
       // if (clouds->cloudCollide(x - 1, y)) {
       //   x++;
       // }
