@@ -58,8 +58,7 @@ class Medal {
     uint8_t currFrame = 1;
 
   public:
-    Medal(Arduboy2 *ab_ptr) 
-      : ab(ab_ptr) {}
+    Medal(Arduboy2 *ab_ptr) : ab(ab_ptr) {}
 
     uint8_t setX() {
       uint8_t rnd = random(8) * 8 + 64;
