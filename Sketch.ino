@@ -25,6 +25,7 @@
 #include "medal.h"
 #include "score.h"
 #include "cloudMap.h"
+#include "title.h"
 
 Arduboy2 ab;
 Compass compass(&ab);
@@ -33,6 +34,7 @@ CloudMap clouds(&compass);
 Player player(&ab, &clouds);
 uint8_t currentLives;
 Score score;
+Title title(&ab);
 uint8_t gameState;
 
 void setup() {
@@ -50,8 +52,10 @@ void loop() {
 
   switch (gameState) {
     case 0:
-      ab.setCursor(32, 32);
-      ab.println("TITLE SCREEN");
+      // ab.setCursor(32, 32);
+      // ab.println("TITLE SCREEN");
+      title.update();
+      title.draw();
 
       if (ab.justPressed(A_BUTTON) || ab.justPressed(B_BUTTON)) {
         ab.initRandomSeed();
