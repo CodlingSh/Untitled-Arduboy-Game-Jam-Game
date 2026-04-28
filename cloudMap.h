@@ -152,8 +152,8 @@ class CloudMap {
     }
 
     bool cloudCollide(uint8_t playerX, uint8_t playerY) {
-      uint8_t mapPixelX = playerX + (int8_t)xOffset;
-      uint8_t mapPixelY = playerY + (int8_t)yOffset;
+      uint16_t mapPixelX = playerX + (int16_t)xOffset;
+      uint16_t mapPixelY = playerY + (int16_t)yOffset;
       
       // Top-left
       uint8_t gridX = mapPixelX / 8;
@@ -178,7 +178,6 @@ class CloudMap {
       return false;
     }
 
-
     void draw() {
       int16_t xOff = (int16_t)xOffset;
       int16_t yOff = (int16_t)yOffset;
@@ -200,6 +199,22 @@ class CloudMap {
 
     uint16_t getMap() {
       return map1;
+    }
+
+    int8_t getDx() {
+      return dx;
+    }
+
+    int8_t getDy() {
+      return dy;
+    }
+
+    float getYOffset() {
+      return yOffset;
+    }
+
+    float getXOffset() {
+      return xOffset;
     }
 };
 
