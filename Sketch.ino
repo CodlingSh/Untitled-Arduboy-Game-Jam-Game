@@ -82,7 +82,10 @@ void loop() {
 
       }
       ab.setCursor(111, 57);
-      ab.print(ab.cpuLoad());
+      ab.println(ab.cpuLoad());
+      ab.setCursor(1, 47);
+      ab.println(clouds.getXOffset());
+      ab.println(clouds.getYOffset());
       break;
   }
 
