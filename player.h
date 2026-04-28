@@ -63,7 +63,11 @@ class Player {
       }
 
       if (clouds->cloudCollide(x, y)) {
-        
+        int8_t dx = clouds->getDx();
+        int8_t dy = clouds->getDy();
+
+        x -= dx;
+        y -= dy;
       }
       // if (clouds->cloudCollide(x - 1, y)) {
       //   x++;
@@ -139,17 +143,17 @@ class Player {
         }
       }
 
-      if (x < xMin) {
-        x = xMin;
-      } else if (x > xMax) {
-        x = xMax;
-      }
+      // if (x < xMin) {
+      //   x = xMin;
+      // } else if (x > xMax) {
+      //   x = xMax;
+      // }
 
-      if (y < yMin) {
-        y = yMin;
-      } else if (y > yMax) {
-        y = yMax;
-      }
+      // if (y < yMin) {
+      //   y = yMin;
+      // } else if (y > yMax) {
+      //   y = yMax;
+      // }
     }
 };
 
