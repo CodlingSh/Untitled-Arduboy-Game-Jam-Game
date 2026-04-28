@@ -58,9 +58,12 @@ void loop() {
       title.draw();
 
       if (ab.justPressed(A_BUTTON) || ab.justPressed(B_BUTTON)) {
-        ab.initRandomSeed();
-        medal.spawn(player.getX(), player.getY());
-        gameState = 1;
+        gameState = title.getSelection() + 1; // Adding 1 to make up for 0 index of selection
+        
+        if (gameState == 1) {
+          ab.initRandomSeed();
+          medal.spawn(player.getX(), player.getY());
+        }
       }
       break;
     case 1:
