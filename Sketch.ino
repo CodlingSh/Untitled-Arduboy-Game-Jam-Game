@@ -11,11 +11,6 @@
 
 // TODO
 // Animate player sprite
-// Move clouds with a nice linear acceleration and decelleration
-// Rotate arrow and change wind direction
-// Cause life to be lost when crushed against wall by cloud
-// Make nice title screen
-// add instructions
 // add music and sound effects
 // Adjust score values to closer match 1 - 50 and not 1 - 42
 
@@ -26,15 +21,20 @@
 #include "score.h"
 #include "cloudMap.h"
 #include "title.h"
+#include "help.h"
+#include "credits.h"
 
 Arduboy2 ab;
 Compass compass(&ab);
 Medal medal(&ab);
 CloudMap clouds(&compass);
 Player player(&ab, &clouds);
-uint8_t currentLives;
+int8_t currentLives;
 Score score;
 Title title(&ab);
+Help helpMe;
+Credits theCredits;
+uint8_t deathTimer = 360;
 uint8_t gameState;
 
 void setup() {
@@ -52,8 +52,6 @@ void loop() {
 
   switch (gameState) {
     case 0:
-      // ab.setCursor(32, 32);
-      // ab.println("TITLE SCREEN");
       title.update();
       title.draw();
 
@@ -61,34 +59,70 @@ void loop() {
         gameState = title.getSelection() + 1; // Adding 1 to make up for 0 index of selection
         
         if (gameState == 1) {
-          ab.initRandomSeed();
-          medal.spawn(player.getX(), player.getY());
+          resetGame();
         }
       }
       break;
     case 1:
-      clouds.update();
-      player.update();
+      // Death check
+      if (!player.getIsDead()) {
+        clouds.update();
+        player.update();
+        medal.update();
+
+        if (collides(player, medal)) {
+          score.incScore(medal.getTimerScore());
+          medal.spawn(player.getX(), player.getY());
+        }
+      } else if (player.getIsDead() && currentLives > 1) {
+        deathTimer--;
+        if (deathTimer == 0) {
+          currentLives--;
+          resetLife();
+        }
+      } else {
+        deathTimer--;
+        if (deathTimer == 0) {
+          gameState = 5;
+        }
+      }
+
       player.draw();
       clouds.draw();
       ab.fillRect(64, 1, 8, 63, BLACK);
       score.draw();
-      compass.draw(currentLives);
-      medal.update();
+      compass.draw(currentLives, clouds.isWindActive());
       medal.draw();
-      if (collides(player, medal)) {
-        score.incScore(medal.getTimerScore());
-        medal.spawn(player.getX(), player.getY());
-      }
-      if (clouds.cloudCollide(player.getX(), player.getY())) {
-        ab.print("T");
-
-      }
+      
       ab.setCursor(111, 57);
       ab.println(ab.cpuLoad());
-      ab.setCursor(1, 47);
-      ab.println(clouds.getXOffset());
-      ab.println(clouds.getYOffset());
+      ab.setCursor(0, 47);
+      ab.println((uint16_t)clouds.getXOffset());
+      ab.println((uint16_t)clouds.getYOffset());
+      break;
+    case 2:
+      if (ab.justPressed(A_BUTTON) || ab.justPressed(B_BUTTON)) {
+        gameState = 0;
+      }
+      helpMe.draw();
+      break;
+    case 3:
+      if (ab.justPressed(A_BUTTON) || ab.justPressed(B_BUTTON)) {
+        gameState = 0;
+      }
+      ab.println("FUTURE SETTINGS MENU");
+      break;
+    case 4:
+      if (ab.justPressed(A_BUTTON) || ab.justPressed(B_BUTTON)) {
+        gameState = 0;
+      }
+      theCredits.draw();
+      break;
+    case 5:
+      if (ab.justPressed(A_BUTTON) || ab.justPressed(B_BUTTON)) {
+        gameState = 0;
+      }
+      ab.println("GAME OVER");
       break;
   }
 
@@ -107,4 +141,16 @@ bool collides(const A& a, const B& b) {
     }
   
   return false;
+}
+
+void resetGame() {
+  resetLife();
+  currentLives = 3;
+}
+
+void resetLife() {
+  ab.initRandomSeed();
+  medal.spawn(player.getX(), player.getY());
+  player.spawn();
+  deathTimer = 360;
 }
