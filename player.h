@@ -4,12 +4,6 @@
 #include <Arduboy2.h>
 #include "cloudMap.h"
 
-// 8x8, 1 frame(s), 8 bytes
-// Example: Arduboy2Base::drawBitmap(x, y, face, 8, 8, WHITE);
-const uint8_t PROGMEM face[] = {
-  0x7e, 0xff, 0xd3, 0xbf, 0xbf, 0xd3, 0xff, 0x7e,
-};
-
 // 8x8, 1 frame(s)
 // Image: 10 bytes, Mask: 8 bytes
 // Example: Sprites::drawExternalMask(x, y, hero, heroMask, frame, 0);
@@ -34,26 +28,50 @@ const uint8_t PROGMEM heroMaskLeft[] = {
   0x20, 0x90, 0xff, 0x3f, 0xbf, 0xff, 0x10, 0x20,
 };
 
+// 8x8, 5 frame(s), 42 bytes
+// Example: Sprites::drawOverwrite(x, y, playerDeath, frame);
+const uint8_t PROGMEM playerDeath[] = {
+  8, 8,
+  // Frame 0
+  0x20, 0x90, 0xfd, 0x37, 0xb5, 0xff, 0x10, 0x20,
+  // Frame 1
+  0x36, 0x24, 0xbd, 0x7e, 0x24, 0x3c, 0x28, 0x3c,
+  // Frame 2
+  0x04, 0x08, 0xff, 0xad, 0xec, 0xbf, 0x09, 0x04,
+  // Frame 3
+  0x3c, 0x14, 0x3c, 0x24, 0x7e, 0xbd, 0x24, 0x6c,
+  // Frame 4
+  0xd8, 0x90, 0xf0, 0xfc, 0xf0, 0xfc, 0xf0, 0xf0,
+};
+
 class Player {
   private:
     Arduboy2 *ab;
     CloudMap *clouds;
     int8_t x = 30;
     int8_t y = 30;
-    uint8_t height = 8;
-    uint8_t width = 8;
+    uint8_t height = 7;
+    uint8_t width = 7;
     uint8_t xMin = 1;
     uint8_t xMax = 55;
     uint8_t yMin = 1;
     uint8_t yMax = 55;
-    boolean lastDirLeft = true;
+    bool lastDirLeft = true;
+    bool isDead = false;
     uint8_t *currSpr = heroRight;
     uint8_t *currMask = heroMaskRight;
-    
+    uint8_t deadFrames[25] = {0,0,1,1,2,2,3,3,0,0,1,1,2,2,3,3,0,0,1,1,2,2,3,3,4};
+    uint8_t deadFrameIndex = 0;
   public:
     Player(Arduboy2 *ab_ptr, CloudMap *cloud_ptr) : ab(ab_ptr), clouds(cloud_ptr) {}
 
     void update() {
+      if (isDead == true) {
+        return;
+      } else {
+        deadFrameIndex = 0;
+      }
+
       move();
 
       if (ab->pressed(LEFT_BUTTON)) {
@@ -69,21 +87,15 @@ class Player {
         x -= dx;
         y -= dy;
       }
-      // if (clouds->cloudCollide(x - 1, y)) {
-      //   x++;
-      // }
-      
-      // if (clouds->cloudCollide(x + 1, y)) {
-      //   x--;
-      // }
-      
-      // if (clouds->cloudCollide(x, y - 1)) {
-      //   y++;
-      // }
-      
-      // if (clouds->cloudCollide(x, y + 1)) {
-      //   y--;
-      // }
+
+      if (
+        x < xMin ||
+        x > xMax ||
+        y < yMin ||
+        y > yMax
+      ) {
+        isDead = true;
+      }
     }
 
     void draw() {
@@ -95,6 +107,14 @@ class Player {
         currMask = heroMaskRight;
       }
       Sprites::drawExternalMask(x, y, currSpr, currMask, 0, 0);
+
+      if (isDead) {
+        Sprites::drawOverwrite(x, y, playerDeath, deadFrames[deadFrameIndex]);
+        
+        if (deadFrameIndex < 25) {
+          deadFrameIndex++;
+        }
+      }
     }
 
     int8_t getX() {
@@ -103,6 +123,10 @@ class Player {
 
     int8_t getY() {
       return y;
+    }
+
+    bool getIsDead() {
+      return isDead;
     }
 
     void setX(uint8_t newX) {
@@ -121,39 +145,33 @@ class Player {
       return height;
     }
 
+    void spawn() {
+      x = 30;
+      y = 30;
+      isDead = false;
+    }
+
     void move() {
-      if (ab->pressed(LEFT_BUTTON)) {
+      if (ab->pressed(LEFT_BUTTON) && x > xMin) {
         if (!clouds->cloudCollide(x - 1, y)) {
           x--;
         }
       }
-      if (ab->pressed(RIGHT_BUTTON)) {
+      if (ab->pressed(RIGHT_BUTTON) && x < xMax) {
         if (!clouds->cloudCollide(x + 1, y)) {
           x++;
         }
       }
-      if (ab->pressed(UP_BUTTON)) {
+      if (ab->pressed(UP_BUTTON) && y > yMin) {
         if (!clouds->cloudCollide(x, y - 1)) {
           y--;
         }
       }
-      if (ab->pressed(DOWN_BUTTON)) {
+      if (ab->pressed(DOWN_BUTTON) && y < yMax) {
         if (!clouds->cloudCollide(x, y + 1)) {
           y++;
         }
       }
-
-      // if (x < xMin) {
-      //   x = xMin;
-      // } else if (x > xMax) {
-      //   x = xMax;
-      // }
-
-      // if (y < yMin) {
-      //   y = yMin;
-      // } else if (y > yMax) {
-      //   y = yMax;
-      // }
     }
 };
 
