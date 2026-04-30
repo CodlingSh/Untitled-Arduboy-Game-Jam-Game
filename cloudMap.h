@@ -3,10 +3,16 @@
 
 #include "compass.h"
 
-// 8x8, 1 frame(s), 8 bytes
-// Example: Arduboy2Base::drawBitmap(x, y, cloud, 8, 8, WHITE);
+// 8x8, 1 frame(s)
+// Image: 10 bytes, Mask: 8 bytes
+// Example: Sprites::drawExternalMask(x, y, cloud, cloudMask, frame, 0);
 const uint8_t PROGMEM cloud[] = {
-  0x3c, 0x7e, 0xdf, 0xbf, 0xbf, 0xbe, 0x7c, 0x38,
+  8, 8,
+  0x3c, 0x7e, 0xde, 0xdf, 0xdf, 0x6e, 0x7c, 0x38,
+};
+
+const uint8_t PROGMEM cloudMask[] = {
+  0x3c, 0x7e, 0xfe, 0xff, 0xff, 0x7e, 0x7c, 0x38,
 };
 
 // Cloud maps
@@ -194,8 +200,8 @@ const uint64_t map1[64] = {
 class CloudMap {
   private:
     Compass *compass;
-    double xOffset = 0;
-    double yOffset = 0;
+    double xOffset = 30;
+    double yOffset = 30;
     int16_t lastX = 0;
     int16_t lastY = 0;
     int8_t dx = 0;
@@ -206,12 +212,20 @@ class CloudMap {
     uint8_t windDirection = 5; // 0 = N, 1 = E, 2 = S, 3 = W, 5 = none
     uint8_t secondTimer = 60;
     uint8_t windTimer = 0;
+    uint8_t startDelay = 120;
 
   public:
     CloudMap(Compass *com_ptr) : compass(com_ptr) {}
 
     void update() {
       if (!windActive) {
+        return;
+      }
+
+      if (startDelay > 0) {
+        startDelay--;
+        dx = 0;
+        dy = 0;
         return;
       }
 
@@ -281,18 +295,18 @@ class CloudMap {
       if (((map1[gridY] >> (63 - gridX)) & 1ULL)) return true;
 
       // Top-right
-      gridX = (mapPixelX + 6) / 8;
+      gridX = (mapPixelX + 5) / 8;
       gridY = mapPixelY / 8;
       if (((map1[gridY] >> (63 - gridX)) & 1ULL)) return true;
 
       // Bottom-left
       gridX = mapPixelX / 8;
-      gridY = (mapPixelY + 6) / 8;
+      gridY = (mapPixelY + 5) / 8;
       if (((map1[gridY] >> (63 - gridX)) & 1ULL)) return true;
 
       // Bottom-right
-      gridX = (mapPixelX + 6) / 8;
-      gridY = (mapPixelY + 6) / 8;
+      gridX = (mapPixelX + 5) / 8;
+      gridY = (mapPixelY + 5) / 8;
       if (((map1[gridY] >> (63 - gridX)) & 1ULL)) return true;
 
       return false;
@@ -311,7 +325,8 @@ class CloudMap {
       for (uint8_t y = yStart; y < yEnd; y++) {
         for (uint8_t x = xStart; x < xEnd; x++) {
           if (map1[y] >> (63 - x) & 1ULL) {
-            Arduboy2Base::drawBitmap(x * 8 - xOff, y * 8 - yOff, cloud, 8, 8, WHITE);
+            // Arduboy2Base::drawBitmap(x * 8 - xOff, y * 8 - yOff, cloud, 8, 8, WHITE);
+            Sprites::drawExternalMask(x * 8 - xOff, y * 8 - yOff, cloud, cloudMask, 0, 0);
           }
         }
       }
@@ -339,6 +354,15 @@ class CloudMap {
 
     bool isWindActive() {
       return windActive;
+    }
+
+    void resetMap() {
+      xOffset = 40;
+      yOffset = 40;
+      windBlowing = false;
+      windActive = true;
+      windDirection = 5;
+      startDelay = 120;
     }
 };
 

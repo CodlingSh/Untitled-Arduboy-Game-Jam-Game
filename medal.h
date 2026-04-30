@@ -123,8 +123,8 @@ class Medal {
       localT = 60;
     }
 
-    uint8_t getTimerScore() {
-      return timer + 1;
+    uint8_t getTimerScore() { 
+      return ((uint16_t)timer * 49 + 21) / 42 + 1; 
     }
 
     void animate() {

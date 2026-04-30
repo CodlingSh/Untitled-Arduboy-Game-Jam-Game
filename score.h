@@ -101,6 +101,10 @@ class Score {
       tensScore = 0;
       hundredsScore = 0;
       thousandsScore = 0;
+      tensVis = false;
+      hundredsVis = false;
+      thousandsVis = false;
+      tenthousandsVis = false;
     }
 
     void incScore(int8_t points) {
@@ -148,7 +152,7 @@ class Score {
       }
     }
 
-    void draw() {
+    void draw(int8_t xOffset, int8_t yOffset) {
        uint8_t onesX = 66, tensX = 66, hundredsX = 66, thousandsX = 66, tenthousandsX = 66;
 
       if (tenthousandsVis) {
@@ -185,11 +189,11 @@ class Score {
       }
 
 // Sprites::drawOverwrite(72, 0, arrowUp, 0);
-      Sprites::drawOverwrite(onesX, 48, getSprite(onesScore), 0);
-      if (tensVis) {Sprites::drawOverwrite(tensX, 48, getSprite(tensScore), 0);}
-      if (hundredsVis) {Sprites::drawOverwrite(hundredsX, 48, getSprite(hundredsScore), 0);}
-      if (thousandsVis) {Sprites::drawOverwrite(thousandsX, 48, getSprite(thousandsScore), 0);}
-      if (tenthousandsVis) {Sprites::drawOverwrite(tenthousandsX, 48, getSprite(tenthousandsScore), 0);}
+      Sprites::drawOverwrite(onesX + xOffset, 48 + yOffset, getSprite(onesScore), 0);
+      if (tensVis) {Sprites::drawOverwrite(tensX + xOffset, 48 + yOffset, getSprite(tensScore), 0);}
+      if (hundredsVis) {Sprites::drawOverwrite(hundredsX + xOffset, 48 + yOffset, getSprite(hundredsScore), 0);}
+      if (thousandsVis) {Sprites::drawOverwrite(thousandsX + xOffset, 48 + yOffset, getSprite(thousandsScore), 0);}
+      if (tenthousandsVis) {Sprites::drawOverwrite(tenthousandsX + xOffset, 48 + yOffset, getSprite(tenthousandsScore), 0);}
     }
 
     int16_t getScore() {

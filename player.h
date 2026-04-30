@@ -16,6 +16,32 @@ const uint8_t PROGMEM heroMaskRight[] = {
   0x20, 0x10, 0xff, 0xbf, 0x3f, 0xff, 0x90, 0x20,
 };
 
+// 8x8, 4 frame(s)
+// Image: 34 bytes, Mask: 32 bytes
+// Example: Sprites::drawExternalMask(x, y, playerWalk, playerWalkMask, frame, 0);
+const uint8_t PROGMEM playerWalkRight[] = {
+  8, 8,
+  // Frame 0
+  0x20, 0x10, 0x7f, 0x75, 0x37, 0xfd, 0x90, 0x20,
+  // Frame 1
+  0x20, 0x10, 0xff, 0xb5, 0x37, 0xfd, 0x90, 0x20,
+  // Frame 2
+  0x20, 0x10, 0xff, 0xb5, 0x37, 0x7d, 0x50, 0x20,
+  // Frame 3
+  0x20, 0x10, 0xff, 0xb5, 0x37, 0xfd, 0x90, 0x20,
+};
+
+const uint8_t PROGMEM playerWalkRightMask[] = {
+  // Frame 0
+  0x20, 0x10, 0x7f, 0x7f, 0x3f, 0xff, 0x90, 0x20,
+  // Frame 1
+  0x20, 0x10, 0xff, 0xbf, 0x3f, 0xff, 0x90, 0x20,
+  // Frame 2
+  0x20, 0x10, 0xff, 0xbf, 0x3f, 0x7f, 0x50, 0x20,
+  // Frame 3
+  0x20, 0x10, 0xff, 0xbf, 0x3f, 0xff, 0x90, 0x20,
+};
+
 // 8x8, 1 frame(s)
 // Image: 10 bytes, Mask: 8 bytes
 // Example: Sprites::drawExternalMask(x, y, player, playerMask, frame, 0);
@@ -25,6 +51,32 @@ const uint8_t PROGMEM heroLeft[] = {
 };
 
 const uint8_t PROGMEM heroMaskLeft[] = {
+  0x20, 0x90, 0xff, 0x3f, 0xbf, 0xff, 0x10, 0x20,
+};
+
+// 8x8, 4 frame(s)
+// Image: 34 bytes, Mask: 32 bytes
+// Example: Sprites::drawExternalMask(x, y, playerWalk, playerWalkMask, frame, 0);
+const uint8_t PROGMEM playerWalk[] = {
+  8, 8,
+  // Frame 0
+  0x20, 0x90, 0xfd, 0x37, 0x75, 0x7f, 0x10, 0x20,
+  // Frame 1
+  0x20, 0x90, 0xfd, 0x37, 0xb5, 0xff, 0x10, 0x20,
+  // Frame 2
+  0x20, 0x50, 0x7d, 0x37, 0xb5, 0xff, 0x10, 0x20,
+  // Frame 3
+  0x20, 0x90, 0xfd, 0x37, 0xb5, 0xff, 0x10, 0x20,
+};
+
+const uint8_t PROGMEM playerWalkMask[] = {
+  // Frame 0
+  0x20, 0x90, 0xff, 0x3f, 0x7f, 0x7f, 0x10, 0x20,
+  // Frame 1
+  0x20, 0x90, 0xff, 0x3f, 0xbf, 0xff, 0x10, 0x20,
+  // Frame 2
+  0x20, 0x50, 0x7f, 0x3f, 0xbf, 0xff, 0x10, 0x20,
+  // Frame 3
   0x20, 0x90, 0xff, 0x3f, 0xbf, 0xff, 0x10, 0x20,
 };
 
@@ -58,10 +110,13 @@ class Player {
     uint8_t yMax = 55;
     bool lastDirLeft = true;
     bool isDead = false;
-    uint8_t *currSpr = heroRight;
-    uint8_t *currMask = heroMaskRight;
+    const uint8_t *currSpr = heroRight;
+    const uint8_t *currMask = heroMaskRight;
     uint8_t deadFrames[25] = {0,0,1,1,2,2,3,3,0,0,1,1,2,2,3,3,0,0,1,1,2,2,3,3,4};
     uint8_t deadFrameIndex = 0;
+    uint8_t walkFrame = 0;
+    uint8_t walkTimer = 0;
+    bool isWalking = false;
   public:
     Player(Arduboy2 *ab_ptr, CloudMap *cloud_ptr) : ab(ab_ptr), clouds(cloud_ptr) {}
 
@@ -72,7 +127,26 @@ class Player {
         deadFrameIndex = 0;
       }
 
+      isWalking = false;
+
+      int8_t oldX = x;
+      int8_t oldY = y;
+
       move();
+
+      isWalking = (x != oldX || y != oldY);
+
+      if (isWalking) {
+        walkTimer++;
+
+        if (walkTimer >= 6) {   // lower = faster animation
+          walkTimer = 0;
+          walkFrame = (walkFrame + 1) % 4;
+        }
+      } else {
+        walkTimer = 0;
+        walkFrame = 1; // your neutral standing frame
+      }
 
       if (ab->pressed(LEFT_BUTTON)) {
         lastDirLeft = true;
@@ -80,7 +154,7 @@ class Player {
         lastDirLeft = false;
       }
 
-      if (clouds->cloudCollide(x, y)) {
+      if (collideAt(x, y)) {
         int8_t dx = clouds->getDx();
         int8_t dy = clouds->getDy();
 
@@ -99,20 +173,27 @@ class Player {
     }
 
     void draw() {
-      if (lastDirLeft) {
-        currSpr = heroLeft;
-        currMask = heroMaskLeft;
-      } else {
-        currSpr = heroRight;
-        currMask = heroMaskRight;
-      }
-      Sprites::drawExternalMask(x, y, currSpr, currMask, 0, 0);
-
       if (isDead) {
         Sprites::drawOverwrite(x, y, playerDeath, deadFrames[deadFrameIndex]);
-        
-        if (deadFrameIndex < 25) {
+
+        if (deadFrameIndex < 24) {
           deadFrameIndex++;
+        }
+
+        return;
+      }
+
+      if (lastDirLeft) {
+        if (isWalking) {
+          Sprites::drawExternalMask(x, y, playerWalk, playerWalkMask, walkFrame, 0);
+        } else {
+          Sprites::drawExternalMask(x, y, heroLeft, heroMaskLeft, 0, 0);
+        }
+      } else {
+        if (isWalking) {
+          Sprites::drawExternalMask(x, y, playerWalkRight, playerWalkRightMask, walkFrame, 0);
+        } else {
+          Sprites::drawExternalMask(x, y, heroRight, heroMaskRight, 0, 0);
         }
       }
     }
@@ -151,24 +232,31 @@ class Player {
       isDead = false;
     }
 
+    bool collideAt(int8_t px, int8_t py) {
+      return clouds->cloudCollide(px + 1, py + 1);
+    }
+
     void move() {
       if (ab->pressed(LEFT_BUTTON) && x > xMin) {
-        if (!clouds->cloudCollide(x - 1, y)) {
+        if (!collideAt(x - 1, y)) {
           x--;
         }
       }
+
       if (ab->pressed(RIGHT_BUTTON) && x < xMax) {
-        if (!clouds->cloudCollide(x + 1, y)) {
+        if (!collideAt(x + 1, y)) {
           x++;
         }
       }
+
       if (ab->pressed(UP_BUTTON) && y > yMin) {
-        if (!clouds->cloudCollide(x, y - 1)) {
+        if (!collideAt(x, y - 1)) {
           y--;
         }
       }
+
       if (ab->pressed(DOWN_BUTTON) && y < yMax) {
-        if (!clouds->cloudCollide(x, y + 1)) {
+        if (!collideAt(x, y + 1)) {
           y++;
         }
       }
