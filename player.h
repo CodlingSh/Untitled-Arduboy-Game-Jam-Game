@@ -100,8 +100,8 @@ class Player {
   private:
     Arduboy2 *ab;
     CloudMap *clouds;
-    int8_t x = 30;
-    int8_t y = 30;
+    int8_t x = 27;
+    int8_t y = 27;
     uint8_t height = 7;
     uint8_t width = 7;
     uint8_t xMin = 1;
@@ -158,8 +158,14 @@ class Player {
         int8_t dx = clouds->getDx();
         int8_t dy = clouds->getDy();
 
-        x -= dx;
-        y -= dy;
+        // Push if hitting a cloud, but not moving
+        if (dx != 0 && !collideAt(x - dx, y)) {
+          x -= dx;
+        }
+
+        if (dy != 0 && !collideAt(x, y - dy)) {
+          y -= dy;
+        }
       }
 
       if (
@@ -227,8 +233,8 @@ class Player {
     }
 
     void spawn() {
-      x = 30;
-      y = 30;
+      x = 27;
+      y = 27;
       isDead = false;
     }
 

@@ -196,7 +196,7 @@ class Score {
       if (tenthousandsVis) {Sprites::drawOverwrite(tenthousandsX + xOffset, 48 + yOffset, getSprite(tenthousandsScore), 0);}
     }
 
-    int16_t getScore() {
+    int32_t getScore() {
       return score;
     }
 };

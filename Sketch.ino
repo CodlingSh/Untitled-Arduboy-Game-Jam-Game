@@ -71,7 +71,7 @@ Help helpMe;
 GameOver gameOver;
 Credits theCredits;
 Settings setting;
-uint8_t deathTimer = 360;
+uint8_t deathTimer = 120;
 uint8_t gameState;
 ArduboyTones sound(ab.audio.enabled);
 bool deathSoundPlayed = false;
@@ -83,6 +83,7 @@ int8_t menuSelection = 0;
 void setup() {
   ab.begin();
   ab.setFrameRate(60);
+  ab.setRGBled(0, 0, 0);
   currentLives = 3;
   gameState = 0;
 }
@@ -92,6 +93,10 @@ void loop() {
 
   ab.pollButtons();
   ab.clear();
+
+  if (gameState != 1) {
+    ab.setRGBled(0, 0, 0);
+  }
 
   switch (gameState) {
     case 0:
@@ -141,17 +146,28 @@ void loop() {
         }
       }
 
+      // Set speed 
+      if (score.getScore() >= 2500) {
+        clouds.setSpeed(1);
+      } else if (score.getScore() >= 500) {
+        clouds.setSpeed(0.50);
+      }
+
+      if (ledOn) {
+        uint8_t val = medal.getTimerScore();
+        uint8_t brightness = map(val, 0, 50, 0, 128);
+
+        ab.setRGBled(0, brightness, 0);
+      } else {
+        ab.setRGBled(0, 0, 0);
+      }
+
       player.draw();
       clouds.draw();
       ab.fillRect(64, 1, 8, 63, BLACK);
       score.draw(0, 0);
       compass.draw(currentLives, clouds.isWindActive());
       medal.draw();
-      
-      ab.setCursor(111, 57);
-      ab.setCursor(0, 47);
-      ab.println((uint16_t)clouds.getXOffset());
-      ab.println((uint16_t)clouds.getYOffset());
       break;
     case 2:
       if (ab.justPressed(A_BUTTON) || ab.justPressed(B_BUTTON)) {
@@ -240,10 +256,10 @@ void resetGame() {
 }
 
 void resetLife() {
-  ab.initRandomSeed();
+  // ab.initRandomSeed();
   medal.spawn(player.getX(), player.getY());
   player.spawn();
-  deathTimer = 360;
+  deathTimer = 120;
   clouds.resetMap();
   deathSoundPlayed = false; 
 }

@@ -132,13 +132,13 @@ class Compass {
           arrowSpr = arrowUp;
           break;
         case 1:
-          arrowSpr = arrowLeft;
+          arrowSpr = arrowRight;
           break;
         case 2:
           arrowSpr = arrowDown;
           break;
         case 3:
-          arrowSpr = arrowRight;
+          arrowSpr = arrowLeft;
           break;
         case 5:
           break;
